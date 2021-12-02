@@ -25,6 +25,22 @@ int main(int argc, char **argv)
 }
 ```
 
+- `CC`
+The C compiler used. It defaults to `cc`.
+
+```c
+#define CC "clang" // This must be placed BEFORE the include
+#include "cbuild.h"
+```
+
+- `CFLAGS`
+The compilation flags used. It defaults to `-Wall -Werror -std=c11 -pedantic`.
+
+```c
+#define CFLAGS "-Wall", "-Wextra" // Don't be pedantic, the C standard is for boomers!
+#include "cbuild.h"
+```
+
 ## Use Cases
 None.
 
