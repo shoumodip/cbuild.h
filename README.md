@@ -1,7 +1,4 @@
 # Cbuild
-Self building C program.
-
-## Explanation
 Recompiles the C program automatically if the last modification time of the
 source code is later than the binary.
 
