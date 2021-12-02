@@ -25,7 +25,7 @@ int main(int argc, char **argv)
 }
 ```
 
-- `CC`
+### `CC`
 The C compiler used. It defaults to `cc`.
 
 ```c
@@ -33,7 +33,7 @@ The C compiler used. It defaults to `cc`.
 #include "cbuild.h"
 ```
 
-- `CFLAGS`
+### `CFLAGS`
 The compilation flags used. It defaults to `-Wall -Werror -std=c11 -pedantic`.
 
 ```c
