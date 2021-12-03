@@ -45,14 +45,16 @@ void rebuild_impl(int argc, char **argv, char *file)
             puts("");
 
             execvp(compile[0], compile);
-            exit(1);
         } else {
             int status;
             wait(&status);
 
-            execvp(argv[0], argv);
-            exit(1);
+            if (WEXITSTATUS(status) == 0) {
+                execvp(argv[0], argv);
+            }
         }
+
+        exit(1);
     }
 }
 
