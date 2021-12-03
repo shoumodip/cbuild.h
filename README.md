@@ -34,7 +34,7 @@ The C compiler used. It defaults to `cc`.
 ```
 
 ### `CFLAGS`
-The compilation flags used. It defaults to `-Wall -Werror -std=c11 -pedantic`.
+The compilation flags used. It defaults to `-Wall -Wextra -std=c11 -pedantic`.
 
 ```c
 #define CFLAGS "-Wall", "-Wextra" // Don't be pedantic, the C standard is for boomers!

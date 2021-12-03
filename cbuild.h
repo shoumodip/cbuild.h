@@ -20,7 +20,7 @@ long last_modified(const char *file_path)
 #endif
 
 #ifndef CFLAGS
-#define CFLAGS "-Wall", "-Werror", "-std=c11", "-pedantic"
+#define CFLAGS "-Wall", "-Wextra", "-std=c11", "-pedantic"
 #endif
 
 #define rebuild(argc, argv)                 \
