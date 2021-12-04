@@ -3,17 +3,14 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
+
 #include <assert.h>
+#include <limits.h>
 #include <unistd.h>
+
 #include <sys/stat.h>
 #include <sys/wait.h>
-
-long last_modified(const char *file_path)
-{
-    struct stat attr;
-    stat(file_path, &attr);
-    return attr.st_mtime;
-}
 
 #ifndef CC
 #define CC "cc"
@@ -22,6 +19,17 @@ long last_modified(const char *file_path)
 #ifndef CFLAGS
 #define CFLAGS "-Wall", "-Wextra", "-std=c11", "-pedantic"
 #endif
+
+char rebuild_source_buffer[PATH_MAX];
+char rebuild_binary_buffer[PATH_MAX];
+
+bool rebuild_modified(void)
+{
+    struct stat source, binary;
+    stat(rebuild_source_buffer, &source);
+    stat(rebuild_binary_buffer, &binary);
+    return source.st_mtime > binary.st_mtime;
+}
 
 #define rebuild(argc, argv)                 \
     do {                                    \
@@ -32,11 +40,14 @@ void rebuild_impl(int argc, char **argv, char *file)
 {
     assert(argc);
 
-    if (last_modified(file) > last_modified(argv[0])) {
+    realpath(file, rebuild_source_buffer);
+    realpath(argv[0], rebuild_binary_buffer);
+
+    if (rebuild_modified()) {
         int child = fork();
 
         if (child == 0) {
-            char *compile[] = {CC, CFLAGS, "-o", argv[0], file, NULL};
+            char *compile[] = {CC, CFLAGS, "-o", rebuild_binary_buffer, rebuild_source_buffer, NULL};
 
             printf("CMD: ");
             for (size_t i = 0; compile[i]; ++i) {
@@ -50,7 +61,7 @@ void rebuild_impl(int argc, char **argv, char *file)
             wait(&status);
 
             if (WEXITSTATUS(status) == 0) {
-                execvp(argv[0], argv);
+                execvp(rebuild_binary_buffer, argv);
             }
         }
 
